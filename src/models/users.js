@@ -1,5 +1,5 @@
 const sqlite = require("sqlite3")
-const db = new sqlite.Database("users.db")
+const db = new sqlite.Database("database.db")
 const bcrypt = require("bcrypt")
 var jwt = require('jsonwebtoken');
 
@@ -57,7 +57,7 @@ async function createUser(username, password) {
 async function createAccount() {
     return new Promise(
         (resolve, reject) => {
-            db.run("INSERT INTO accounts (balance) VALUES (0)",
+            db.run("INSERT INTO accounts (id, balance) VALUES (1000)",
                 function (err) {
                     if (err) return reject(err)
                     else resolve(this.lastID)
@@ -68,12 +68,28 @@ async function createAccount() {
 }
 
 
+
+
+
+
+async function getBalance(userId) {
+    return new Promise((resolve, reject) => {
+        db.get("SELECT balance FROM accounts WHERE id = ?", [userId], (err, row) => {
+            if (err) reject(err);
+            else resolve(row ? row.balance : 0);
+        });
+    });
+}
+
+
+
 async function login(username, password) {
-    const userId = (await getUserByUsername(username)).id
-    var token = await jwt.sign({id: userId}, 'shhhhh', {expiresIn: "3h"});
+    const user = (await getUserByUsername(username))
+    const balance = await getBalance(user.id);  
+    var token = await jwt.sign({id: user.id, nickname: user.name, balance: balance}, 'shhhhh', {expiresIn: "10d"});
     return token
 
     
 }
 
-module.exports = {createAccount, createUser, userExists, getUserById, getUserByUsername, login}
+module.exports = {createAccount, createUser, userExists, getUserById, getUserByUsername, login, getBalance, db }

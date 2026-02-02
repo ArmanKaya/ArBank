@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArBank - Konto</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa, #e4e9f0);
+      color: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      backdrop-filter: blur(5px);
+      background-color: rgba(255, 255, 255, 0.9);
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    header #logo {
+      font-size: 2rem;
+      letter-spacing: 2px;
+      color: #003366;
+      font-weight: 700;
+    }
+
+    nav a {
+      margin-left: 25px;
+      text-decoration: none;
+      font-weight: 500;
+      color: #003366;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background: #0066cc;
+      left: 0;
+      bottom: -3px;
+      transition: width 0.3s;
+    }
+
+    nav a:hover {
+      color: #0066cc;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    main {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 50px 20px;
+    }
+
+    .account-card {
+      background: linear-gradient(135deg, #004080, #0066cc);
+      color: #fff;
+      border-radius: 20px;
+      padding: 30px 40px;
+      width: 450px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-header h3 {
+      font-size: 1.2rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+
+    .card-balance {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-top: 10px;
+    }
+
+    .card-number {
+      letter-spacing: 3px;
+      font-size: 1.1rem;
+      margin-top: 15px;
+      opacity: 0.9;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #f5a623, #ffcc00);
+      color: #1a1a1a;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: rgba(245, 247, 250, 0.9);
+      border-top: 1px solid rgba(0,0,0,0.1);
+      color: #333;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      main {
+        padding: 30px 10px;
+      }
+
+      .account-card {
+        width: 90%;
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" id="logo">ArBank</a>
+    <nav>
+      <a href="/">Hjem</a>
+      <a href="/konto">Konto</a>
+      <a href="/konto/tjenester">Tjenester</a>
+      <a href="/kontakt">Kontakt</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="account-card">
+      <div class="card-header">
+        <h3>ArBank Debit</h3>
+        <span>💳</span>
+      </div>
+      <div class="card-number">
+        <%= card_number %>
+      </div>
+      <div class="card-balance">
+        <%= balance %> NOK
+      </div>
+
+      <a href="/transfer" class="btn">Overfør penger</a>
+    </div>
+  </main>
+
+  <footer>
+    &copy; <%= new Date().getFullYear() %> ArBank. Alle rettigheter reservert.
+  </footer>
+</body>
+</html>

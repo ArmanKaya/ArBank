@@ -3,7 +3,8 @@ const express = require("express")
 const usersRouter = express.Router()
 var jwt = require('jsonwebtoken');
 const {createAccount, createUser, userExists, login, userId} = require("../models/users")
-
+const sqlite = require("sqlite3")
+const db = sqlite
 
 
 usersRouter.get("/register", (req, res) => {
@@ -35,15 +36,17 @@ usersRouter.post("/login", async (req, res) => {
     
     const token = await login(username, password)
 
-    res.cookie("token", token)
+    res.cookie("token", token, {maxAge: 1000 * 3600})
     console.log(token)
     
     res.redirect("/")
 });
 
 
+
 // usersRouter.post("/login/welcome"), (req, ress) =>{
 //     res.send(`Velkommen til ArBank ${}`)
 // }
 
-module.exports = usersRouter
+
+module.exports = { usersRouter };

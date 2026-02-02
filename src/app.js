@@ -7,22 +7,28 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser())
 const path = require("path")
-const usersRouter = require("./routes/users")
+const { usersRouter } = require("./routes/users");
+const { accountRouter } = require("./routes/account")
+
 
 
 
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"))
+
 app.use((req, res, next) => {
-    if (!req.cookies.token) req.user = {}
-    else {
+    try {
         const payload = jwt.verify(req.cookies.token, 'shhhhh')
-        req.user = {id: payload.id}
+        req.user = {id: payload.id, name: payload.nickname}
     }
 
-    console.log(req.user)
-    next()
+    catch (error) {
+        req.user = {}
+    } finally {
+        console.log(req.user)
+        next()
+    }
 })
     const port = 3001
 
@@ -34,8 +40,10 @@ app.use((req, res, next) => {
 })
 
 app.use("/users", usersRouter)
+app.use("/konto", accountRouter)
+
 app.get("/", (req, res) => {
-    res.render("index")
+    res.render("index", { username: req.user.name })
 })
 
 app.listen(port,() => {
