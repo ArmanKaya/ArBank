@@ -4,18 +4,17 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.js"
+    "dev": "nodemon src/app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "3": "^2.1.0",
     "bcrypt": "^6.0.0",
     "body-parser": "^2.2.2",
+    "cookie-parser": "^1.4.7",
     "jsonwebtoken": "^9.0.3",
-    "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {

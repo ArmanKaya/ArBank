@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArBank - Velkommen</title>
+  <style>
+ @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  body {
+    background: linear-gradient(135deg, #f5f7fa, #e4e9f0);
+    color: #1a1a1a;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    backdrop-filter: blur(5px);
+    background-color: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+  }
+
+  header #logo {
+    font-size: 2rem;
+    letter-spacing: 2px;
+    color: #003366; /* deep corporate blue */
+    text-shadow: none;
+    font-weight: 700;
+  }
+
+  nav a {
+    margin-left: 25px;
+    text-decoration: none;
+    font-weight: 500;
+    color: #003366;
+    position: relative;
+    transition: color 0.3s;
+  }
+
+  nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background: #0066cc;
+    left: 0;
+    bottom: -3px;
+    transition: width 0.3s;
+  }
+
+  nav a:hover {
+    color: #0066cc;
+  }
+
+  nav a:hover::after {
+    width: 100%;
+  }
+
+  main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px 20px;
+  }
+
+  main h2 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #003366;
+    text-shadow: none;
+  }
+
+  main p {
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+    max-width: 600px;
+    line-height: 1.6;
+    color: #333;
+    text-shadow: none;
+  }
+
+  .btn {
+    background: linear-gradient(135deg, #004080, #0066cc);
+    padding: 15px 35px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: transform 0.2s, box-shadow 0.3s;
+  }
+
+  .btn:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    background-color: rgba(245, 247, 250, 0.9);
+    border-top: 1px solid rgba(0,0,0,0.1);
+    color: #333;
+    font-size: 0.9rem;
+    text-shadow: none;
+  }
+
+  @media (max-width: 768px) {
+    main h2 {
+      font-size: 2.2rem;
+    }
+
+    main p {
+      font-size: 1rem;
+    }
+
+    header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+  }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" id="logo">ArBank</a>
+    <nav>
+      <a href="/">Hjem</a>
+      <a href="/konto">Konto</a>
+      <a href="/tjenester">Tjenester</a>
+      <a href="/kontakt">Kontakt</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Velkommen til ArBank</h2>
+    <p>Opplev en moderne, sikker og brukervennlig bankopplevelse. Vi gjør banktjenester enkle, elegante og tilgjengelige for alle.</p>
+    <a href="/users/register" class="btn">Opprett konto</a>
+  </main>
+
+  <footer>
+    &copy; <%= new Date().getFullYear() %> ArBank. Alle rettigheter reservert.
+  </footer>
+</body>
+</html>
