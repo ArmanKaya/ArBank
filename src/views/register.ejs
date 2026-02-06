@@ -5,17 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ArBank</title>
     <link rel="stylesheet" href="/stylesheet.css">
+
+    <style>
+        /* Inline error message */
+        .error-text {
+            color: #f44336; /* red */
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+            font-family: sans-serif;
+        }
+    </style>
 </head>
 <body>
     
     <div class="container_login">
     <form action="/users/register" method="POST">
         <h1>Registrer deg på ArBank</h1>
+
+        <% if (errorRegister) { %>
+            <div class="error-text"><%= errorRegister %></div>
+        <% } %>
         <label for="text"><input type="text" name="username" placeholder="Brukernavn" /></label>
         <label for="password"><input type="password" name="password" placeholder="Passord"></label>
         <button type="submit">bekreft</button>
     </form>
     </div>
+
 
 
 </body>

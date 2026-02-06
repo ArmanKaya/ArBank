@@ -40,6 +40,7 @@
     font-weight: 700;
   }
 
+  
   nav a {
     margin-left: 25px;
     text-decoration: none;
@@ -112,6 +113,12 @@
     transform: scale(1.03);
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   }
+  
+  .button-group {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
 
   footer {
     text-align: center;
@@ -150,14 +157,19 @@
       <a href="/">Hjem</a>
       <a href="/konto">Konto</a>
       <a href="/konto/tjenester">Tjenester</a>
-      <a href="/kontakt">Kontakt</a>
+      <a href="/info">Om Oss</a>
     </nav>
   </header>
 
   <main>
     <h2>Velkommen til ArBank, <%= username %>! </h2>
     <p>Opplev en moderne, sikker og brukervennlig bankopplevelse. Vi gjør banktjenester enkle, elegante og tilgjengelige for alle.</p>
-    <a href="/users/register" class="btn">Opprett konto</a>
+    <div class="button-group">
+      <a href="/users/register" class="btn">Opprett konto</a>
+      <a href="/users/login" class="btn">Logg inn</a>
+    </div>
+    
+
   </main>
 
   <footer>

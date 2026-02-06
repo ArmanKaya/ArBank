@@ -9,9 +9,13 @@ app.use(cookieParser())
 const path = require("path")
 const { usersRouter } = require("./routes/users");
 const { accountRouter } = require("./routes/account")
+const { inforoute } = require("./routes/omoss")
+const { transferRouter } = require("./routes/overfore")
+const { findCardById } = require("./models/accounts");
 
 
 
+const port = 3001
 
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
@@ -29,9 +33,18 @@ app.use((req, res, next) => {
         console.log(req.user)
         next()
     }
+    
 })
-    const port = 3001
 
+  
+app.use(async (req, res, next) => {
+    const cardNumber = req.cookies.selected_account;
+    if (cardNumber) {
+      const account = await findCardById(cardNumber);
+      if (account) req.selected_account = account;
+    }
+    next();
+  });
 
 
 app.use((req, res, next) => {
@@ -39,8 +52,10 @@ app.use((req, res, next) => {
     next()
 })
 
+app.use("/overfore", transferRouter)
 app.use("/users", usersRouter)
 app.use("/konto", accountRouter)
+app.use("/info", inforoute)
 
 app.get("/", (req, res) => {
     res.render("index", { username: req.user.name })

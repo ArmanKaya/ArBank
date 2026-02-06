@@ -2,12 +2,13 @@ const sqlite = require("sqlite3")
 const db = new sqlite.Database("database.db")
 const bcrypt = require("bcrypt")
 var jwt = require('jsonwebtoken');
+const { getBalance} = require("../models/accounts")
 
 
 db.run("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, password TEXT)")
 
-db.run("CREATE TABLE IF NOT EXISTS accounts (id INTEGER PRIMARY KEY AUTOINCREMENT, balance INTEGER)")
-
+db.run("CREATE TABLE IF NOT EXISTS accounts (id INTEGER PRIMARY KEY AUTOINCREMENT, balance INTEGER, userid INTEGER, cardNumber INTEGER)")
+ 
 async function getUserById(id) {
     return new Promise((resolve, reject) => {
         db.get("SELECT * FROM users WHERE id = ?", [id], (err, row) => {
@@ -26,7 +27,6 @@ async function getUserByUsername(username) {
         })
     })
 }
-
 
 async function userExists(username) {
     return new Promise((resolve, reject) => {
@@ -53,43 +53,23 @@ async function createUser(username, password) {
         })
 }
 
-
-async function createAccount() {
-    return new Promise(
-        (resolve, reject) => {
-            db.run("INSERT INTO accounts (id, balance) VALUES (1000)",
-                function (err) {
-                    if (err) return reject(err)
-                    else resolve(this.lastID)
-                    }
-                
-            )
-        })
-}
-
-
-
-
-
-
-async function getBalance(userId) {
-    return new Promise((resolve, reject) => {
-        db.get("SELECT balance FROM accounts WHERE id = ?", [userId], (err, row) => {
-            if (err) reject(err);
-            else resolve(row ? row.balance : 0);
-        });
-    });
-}
-
-
-
 async function login(username, password) {
     const user = (await getUserByUsername(username))
     const balance = await getBalance(user.id);  
+
+    if (!user) throw Error("Brukernavn finnes ikke");
+    const passwordMatch = await new Promise((resolve, reject) => {
+        bcrypt.compare(password, user.password, (err, result) => {
+            if (err) reject(err);
+            else resolve(result);
+        });
+    });
+
+    if (!passwordMatch) throw new Error("Passordet er feil");
+
     var token = await jwt.sign({id: user.id, nickname: user.name, balance: balance}, 'shhhhh', {expiresIn: "10d"});
     return token
-
-    
 }
 
-module.exports = {createAccount, createUser, userExists, getUserById, getUserByUsername, login, getBalance, db }
+
+module.exports = {createUser, userExists, getUserById, getUserByUsername, login, db }
