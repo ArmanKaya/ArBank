@@ -1,57 +1,122 @@
-body {
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f2f4f8;
-    font-family: Arial, sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap');
+
+:root {
+  --bg-dark: #020617;
+  --accent: #3b82f6;
+  --glass: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --text-dim: #94a3b8;
+  --card-bg: linear-gradient(135deg, #0f172a 0%, #020617 100%);
 }
 
-.container_login .error-text {
-    color: #f44336; /* red */
-    font-size: 14px;
-    margin-bottom: 1rem;
-    text-align: center;
-    font-weight: 600;
+/* 1. LAYOUT RESET - Centers the card on the screen */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  height: 100vh !important;
+  background-color: var(--bg-dark) !important;
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(225,39%,20%,1) 0, transparent 50%), 
+    radial-gradient(at 100% 100%, hsla(260,49%,20%,1) 0, transparent 50%) !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  color: #f8fafc;
+  overflow: hidden;
 }
+
+* {
+  box-sizing: border-box;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+/* 2. THE SQUARER CARD CONTAINER */
 .container_login {
-    background: #ffffff;
-    padding: 2rem;
-    border-radius: 10px;
-    width: 320px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  background: var(--card-bg) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 50px 40px !important;
+  border-radius: 12px !important; 
+  border: 1px solid var(--glass-border) !important;
+  width: 100% !important;
+  max-width: 420px !important;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(0,0,0,0.4) !important;
 }
 
+/* 3. TYPOGRAPHY */
+h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-align: left;
+  margin-bottom: 35px;
+  letter-spacing: -1.5px;
+  background: linear-gradient(to bottom right, #ffffff 40%, #64748b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 4. FORM & INPUTS */
 form {
-    display: flex;
-    flex-direction: column;
-}
-
-label {
-    margin-bottom: 0.25rem;
-    font-weight: 600;
+  display: flex !important;
+  flex-direction: column !important;
 }
 
 input {
-    padding: 0.6rem;
-    width: 300px;
-    margin-bottom: 1rem;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 1rem;
+  width: 100% !important;
+  padding: 16px 20px !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 8px !important;
+  color: #fff !important;
+  font-size: 1rem !important;
+  outline: none;
+  margin-bottom: 20px !important;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5) !important;
 }
 
-button {
-    padding: 0.7rem;
-    border: none;
-    border-radius: 6px;
-    background-color: #4f46e5;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
+input::placeholder {
+  color: #475569;
 }
 
-button:hover {
-    background-color: #4338ca;
+input:focus {
+  border-color: var(--accent) !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* 5. PRIMARY ACTION BUTTON */
+button[type="submit"] {
+  margin-top: 10px;
+  padding: 16px !important;
+  border-radius: 8px !important;
+  border: none !important;
+  background: #fff !important; 
+  color: var(--bg-dark) !important;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1) !important;
+}
+
+button[type="submit"]:hover {
+  background: var(--accent) !important;
+  color: #fff !important;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4) !important;
+}
+
+/* 6. ERROR STYLING */
+.error-text {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #fca5a5 !important;
+  padding: 12px !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(239, 68, 68, 0.2) !important;
+  font-size: 0.9rem !important;
+  font-weight: 600;
+  margin-bottom: 20px !important;
+  text-align: center !important;
+  width: 100% !important;
 }

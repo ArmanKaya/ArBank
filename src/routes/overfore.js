@@ -33,5 +33,4 @@ transferRouter.post("/", async (req, res) => {
 
 module.exports = transferRouter;
 
-
 module.exports = { transferRouter }

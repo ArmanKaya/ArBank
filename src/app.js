@@ -21,6 +21,10 @@ app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"))
 
+app.get("/", (req, res) => {
+    res.render("index")
+})
+
 app.use((req, res, next) => {
     try {
         const payload = jwt.verify(req.cookies.token, 'shhhhh')
@@ -57,9 +61,7 @@ app.use("/users", usersRouter)
 app.use("/konto", accountRouter)
 app.use("/info", inforoute)
 
-app.get("/", (req, res) => {
-    res.render("index", { username: req.user.name })
-})
+
 
 app.listen(port,() => {
     console.log(`Server is running on ${port}`)

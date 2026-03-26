@@ -5,151 +5,166 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArBank - Om oss</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap');
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Roboto', sans-serif;
-    }
+:root {
+  --bg-dark: #020617;
+  --accent: #3b82f6;
+  --glass: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --text-dim: #94a3b8;
+  --card-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
 
-    body {
-      background: linear-gradient(135deg, #f5f7fa, #e4e9f0);
-      color: #1a1a1a;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+/* 1. GAP-KILLER & BACKGROUND */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(225,39%,20%,1) 0, transparent 50%), 
+    radial-gradient(at 100% 100%, hsla(260,49%,20%,1) 0, transparent 50%);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+}
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 50px;
-      backdrop-filter: blur(5px);
-      background-color: rgba(255, 255, 255, 0.9);
-      border-bottom: 1px solid rgba(0,0,0,0.1);
-    }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
 
-    header #logo {
-      font-size: 2rem;
-      letter-spacing: 2px;
-      color: #003366;
-      font-weight: 700;
-    }
+/* 2. DOCK-TO-TOP HEADER */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8%;
+  background: rgba(2, 6, 23, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  z-index: 1000;
+}
 
-    nav a {
-      margin-left: 25px;
-      text-decoration: none;
-      font-weight: 500;
-      color: #003366;
-      position: relative;
-      transition: color 0.3s;
-    }
+#logo {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: -1px;
+}
 
-    nav a::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 2px;
-      background: #0066cc;
-      left: 0;
-      bottom: -3px;
-      transition: width 0.3s;
-    }
+nav a {
+  margin-left: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  transition: 0.3s;
+}
 
-    nav a:hover {
-      color: #0066cc;
-    }
+nav a:hover { color: #fff; }
 
-    nav a:hover::after {
-      width: 100%;
-    }
+/* 3. CONTENT AREA */
+main {
+  flex-grow: 1;
+  padding: 140px 20px 60px; /* Offset for header */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-    main {
-      flex-grow: 1;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 50px 20px;
-      gap: 40px;
-      flex-direction: column;
-      max-width: 900px;
-      margin: auto;
-    }
+/* 4. THE INFO BOX (MATCHES THE CARDS) */
+.info-section {
+  background: var(--card-gradient);
+  max-width: 700px;
+  width: 100%;
+  padding: 50px;
+  border-radius: 28px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
 
-    .info-section {
-      background: rgba(255, 255, 255, 0.95);
-      padding: 25px 35px;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
+.info-section h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(to bottom right, #ffffff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -1px;
+}
 
-    .info-section h2 {
-      color: #003366;
-      font-size: 1.8rem;
-      margin-bottom: 15px;
-    }
+.info-section p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--text-dim);
+}
 
-    .info-section p {
-      font-size: 1rem;
-      line-height: 1.5;
-      color: #1a1a1a;
-    }
+.contact-item {
+  font-size: 1.1rem;
+  color: #fff;
+}
 
-    .contact-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 500;
-    }
+.contact-item span {
+  color: var(--accent);
+  font-weight: 700;
+  margin-right: 10px;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
 
-    .contact-item span {
-      font-weight: 700;
-      color: #0066cc;
-    }
+/* 5. BACK BUTTON */
+.btn-back {
+  align-self: flex-start;
+  margin-top: 20px;
+  padding: 14px 30px;
+  border-radius: 12px;
+  background: var(--glass);
+  color: #fff;
+  border: 1px solid var(--glass-border);
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
 
-    .btn-back {
-      margin-top: 20px;
-      background: linear-gradient(135deg, #f5a623, #ffcc00);
-      color: #1a1a1a;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-weight: 500;
-      cursor: pointer;
-      text-decoration: none;
-      transition: transform 0.2s, box-shadow 0.3s;
-      display: inline-block;
-      text-align: center;
-    }
+.btn-back:hover {
+  background: #fff;
+  color: var(--bg-dark);
+  transform: translateY(-2px);
+}
 
-    .btn-back:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-    }
+/* 6. FOOTER */
+footer {
+  text-align: center;
+  padding: 40px;
+  background: rgba(2, 6, 23, 0.5);
+  border-top: 1px solid var(--glass-border);
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      background-color: rgba(245, 247, 250, 0.9);
-      border-top: 1px solid rgba(0,0,0,0.1);
-      color: #333;
-      font-size: 0.9rem;
-    }
-
-    @media (max-width: 768px) {
-      main {
-        padding: 30px 15px;
-      }
-      .info-section {
-        width: 100%;
-      }
-    }
+/* MOBILE FIX */
+@media (max-width: 768px) {
+  header { height: auto; padding: 20px; flex-direction: column; gap: 15px; }
+  nav a { margin: 0 10px; }
+  main { padding-top: 180px; }
+  .info-section { padding: 30px; }
+}
   </style>
 </head>
 <body>
