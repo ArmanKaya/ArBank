@@ -29,7 +29,18 @@ usersRouter.post("/register", async (req, res) => {
 
 
 usersRouter.post("/login", async (req, res) => {
+    const { username, password } = req.body;
+    res.clearCookie("selected_account");
 
+try{
+    const token = await login(username, password)
+
+    res.cookie("token", token, {maxAge: 1000 * 3600})
+    console.log(token)
+    res.redirect("/")
+  }catch (err){
+    res.status(400).render("login", { errorLogin: err.message });
+  }
 
 });
 
