@@ -37,27 +37,12 @@ async function getBalance(cardNumber) {
 
 // Get full account by cardNumber
 async function findCardById(id) {
-    return new Promise((resolve, reject) => {
-        db.get(
-            "SELECT * FROM accounts WHERE id = ?",
-            [id],
-            (err, row) => {
-                if (err) return reject(err);
-                resolve(row);
-            }
-        );
-    });
+
 }
 
 
 async function updateBalance(cardNumber, newBalance) {
-    return new Promise((resolve, reject) => {
-        db.run(
-            "UPDATE accounts SET balance = ? WHERE cardNumber = ?",
-            [newBalance, cardNumber],
-            (err) => (err ? reject(err) : resolve())
-        );
-    });
+
 }
 
 
@@ -76,16 +61,7 @@ async function findCards(userId) {
 
 // Get newest card for a user
 async function getNewestCard(userId) {
-    return new Promise((resolve, reject) => {
-        db.get(
-            "SELECT * FROM accounts WHERE userid = ? ORDER BY id DESC LIMIT 1",
-            [userId],
-            (err, row) => {
-                if (err) return reject(err);
-                resolve(row);
-            }
-        );
-    });
+
 }
 
 module.exports = {
