@@ -13,7 +13,7 @@ transferRouter.get("/", (req, res) => {
 transferRouter.post("/", async (req, res) => {
 
   const card = req.cookies.selected_account;      
-  const amount = req.body.amount; 
+  const amount = Number(req.body.amount);
   const reciever = req.body.selected_reciever
 
   const currentBalance = await getBalance(card);
@@ -31,6 +31,6 @@ transferRouter.post("/", async (req, res) => {
   res.redirect("/konto");
 });
 
-module.exports = transferRouter;
+
 
 module.exports = { transferRouter }
