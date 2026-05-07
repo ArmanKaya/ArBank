@@ -203,6 +203,95 @@ footer {
     width: 100%;
   }
 }
+
+.contact-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 20px;
+}
+
+.contact-card {
+  width: 100%;
+  max-width: 520px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  border-radius: 18px;
+  padding: 30px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.contact-card h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.subtext {
+  color: var(--text-dim);
+  margin-bottom: 25px;
+  font-size: 0.95rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.contact-form label {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  background: rgba(255,255,255,0.02);
+  color: #fff;
+  outline: none;
+  transition: 0.3s;
+}
+
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.contact-form button {
+  margin-top: 10px;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: #fff;
+  color: #0f172a;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.contact-form button:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px var(--accent-glow);
+}
+
+.contact-form select {
+  color: #000;          /* teksten i dropdown */
+  background: #fff;     /* gjør den lesbar */
+}
+
+.contact-form select option {
+  color: #000;          /* sikrer at options også er svarte */
+}
+
   </style>
 </head>
 
@@ -226,6 +315,37 @@ footer {
       <a href="/users/login" class="btn">Logg inn</a>
     </div>
 
+    <main class="contact-wrapper">
+  <div class="contact-card">
+    <h2>Kontakt ArBank</h2>
+    <p class="subtext">Velg kategori og skriv meldingen din</p>
+
+    <form action="/send-mail" method="POST" class="contact-form">
+
+      <!-- Category -->
+      <label>Kategori</label>
+      <select name="category" required>
+        <option value="">Velg kategori</option>
+        <option value="help">Hjelp / Support</option>
+        <option value="card">Kort / Konto</option>
+        <option value="bank">Banktjenester</option>
+        <option value="feedback">Tilbakemelding</option>
+        <option value="bug">Feil / Bug</option>
+      </select>
+
+      <!-- Email -->
+      <label>E-post</label>
+      <input type="email" name="email" placeholder="din@mail.com" required>
+
+      <!-- Message -->
+      <label>Melding</label>
+      <textarea name="message" rows="6" placeholder="Skriv meldingen din her..." required></textarea>
+
+      <!-- Button -->
+      <button type="submit">Send melding</button>
+    </form>
+  </div>
+</main>
 
   </main>
 
