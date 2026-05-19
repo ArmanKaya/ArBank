@@ -1,9 +1,8 @@
-const express = require("express")
+﻿const express = require("express")
 const app = express()
 const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
 const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser())
@@ -13,6 +12,7 @@ const { accountRouter } = require("./routes/account")
 const { inforoute } = require("./routes/omoss")
 const { transferRouter } = require("./routes/overfore")
 const { findCardById } = require("./models/accounts");
+const { supportRouter } = require("./routes/support")
 
 
 
@@ -61,10 +61,10 @@ app.use("/overfore", transferRouter)
 app.use("/users", usersRouter)
 app.use("/konto", accountRouter)
 app.use("/info", inforoute)
+app.use("/support", supportRouter)
 
 
 
 app.listen(port,() => {
     console.log(`Server is running on ${port}`)
 })
-

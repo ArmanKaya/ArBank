@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArBank - Ansatt Support</title>
+  <style>
+    :root {
+      --bg: #081021;
+      --panel: #101b34;
+      --line: #1b2b4f;
+      --text: #e9eefb;
+      --muted: #93a5c7;
+      --err: #ff5f6d;
+      --btn: #2e6cff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: radial-gradient(circle at 20% 0%, #13274d 0%, #081021 55%);
+      color: var(--text);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+    }
+    .panel {
+      width: 100%;
+      max-width: 420px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    h1 { margin: 0 0 8px; font-size: 26px; }
+    p { margin: 0 0 12px; color: var(--muted); }
+    .err {
+      background: rgba(255,95,109,.14);
+      color: #ff9aa2;
+      border: 1px solid rgba(255,95,109,.35);
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 8px;
+      border: 1px solid var(--line);
+      background: #0c1630;
+      color: #fff;
+    }
+    button {
+      background: var(--btn);
+      border: 0;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    a {
+      display: inline-block;
+      margin-top: 12px;
+      color: #9fc2ff;
+      text-decoration: none;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <section class="panel">
+    <h1>Ansatt support</h1>
+    <p>Kun for ansatte og ledere.</p>
+    <% if (error) { %><div class="err"><%= error %></div><% } %>
+    <form action="/support/ansatt/login" method="POST">
+      <input type="text" name="navn" placeholder="Brukernavn" required>
+      <input type="password" name="passord" placeholder="Passord" required>
+      <button type="submit">Logg inn</button>
+    </form>
+    <a href="/support/bruker">Tilbake til support</a>
+  </section>
+</body>
+</html>

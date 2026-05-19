@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArBank - Ticket #<%= ticket.id %></title>
+  <style>
+    :root {
+      --bg: #081021;
+      --panel: #101b34;
+      --line: #1b2b4f;
+      --text: #e9eefb;
+      --muted: #93a5c7;
+      --ok: #14b866;
+      --err: #ff5f6d;
+      --btn: #2e6cff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: radial-gradient(circle at 20% 0%, #13274d 0%, #081021 55%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(6, 11, 24, 0.86);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    #logo {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 22px;
+    }
+    .back {
+      color: #9fc2ff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    main {
+      max-width: 980px;
+      margin: 20px auto;
+      padding: 0 16px 20px;
+      display: grid;
+      gap: 14px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    h1 { margin: 0 0 8px; font-size: 28px; }
+    p { margin: 0; color: var(--muted); }
+    .msg { padding: 10px; border-radius: 8px; margin-bottom: 12px; font-size: 14px; }
+    .ok { background: rgba(20,184,102,.18); color: #9af3c6; border: 1px solid rgba(20,184,102,.4); }
+    .err { background: rgba(255,95,109,.14); color: #ff9aa2; border: 1px solid rgba(255,95,109,.35); }
+    .thread {
+      display: grid;
+      gap: 10px;
+    }
+    .bubble {
+      border: 1px solid var(--line);
+      background: #0c1630;
+      border-radius: 10px;
+      padding: 10px;
+    }
+    .bubble-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 5px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .who {
+      font-weight: 700;
+      color: #d5e5ff;
+    }
+    .text {
+      white-space: pre-wrap;
+      line-height: 1.45;
+      font-size: 14px;
+    }
+    textarea, button {
+      width: 100%;
+      border-radius: 8px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      background: #0c1630;
+      color: #fff;
+      margin-top: 8px;
+    }
+    button {
+      border: 0;
+      background: var(--btn);
+      font-weight: 700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" id="logo">ArBank</a>
+    <% if (role === "ansatt") { %>
+      <a class="back" href="/support/ansatt/dashboard">Tilbake til dashboard</a>
+    <% } else { %>
+      <a class="back" href="/support/bruker">Tilbake til support</a>
+    <% } %>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h1>Ticket #<%= ticket.id %></h1>
+      <p><strong>Tema:</strong> <%= ticket.tema %></p>
+      <p><strong>Status:</strong> <%= ticket.status %></p>
+      <p><strong>Bruker:</strong> <%= ticket.user_name || ticket.user_id %></p>
+    </section>
+
+    <section class="panel">
+      <% if (ok) { %><div class="msg ok"><%= ok %></div><% } %>
+      <% if (error) { %><div class="msg err"><%= error %></div><% } %>
+      <div class="thread">
+        <% if (!messages || messages.length === 0) { %>
+          <div class="bubble">Ingen meldinger enda.</div>
+        <% } %>
+        <% if (messages && messages.length > 0) { %>
+          <% messages.forEach((msg) => { %>
+            <article class="bubble">
+              <div class="bubble-header">
+                <span class="who"><%= msg.sender_name %> (<%= msg.sender_type %>)</span>
+              </div>
+              <div class="text"><%= msg.melding %></div>
+            </article>
+          <% }) %>
+        <% } %>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Send melding</h2>
+      <% if (role === "ansatt") { %>
+        <form action="/support/ansatt/ticket/<%= ticket.id %>/message" method="POST">
+          <textarea name="melding" rows="4" placeholder="Skriv svar til bruker" required></textarea>
+          <button type="submit">Send svar</button>
+        </form>
+      <% } else { %>
+        <form action="/support/bruker/ticket/<%= ticket.id %>/message" method="POST">
+          <textarea name="melding" rows="4" placeholder="Skriv melding" required></textarea>
+          <button type="submit">Send melding</button>
+        </form>
+      <% } %>
+    </section>
+  </main>
+</body>
+</html>

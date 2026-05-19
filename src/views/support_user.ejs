@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArBank - Support</title>
+  <style>
+    :root {
+      --bg: #081021;
+      --panel: #101b34;
+      --line: #1b2b4f;
+      --text: #e9eefb;
+      --muted: #93a5c7;
+      --ok: #14b866;
+      --err: #ff5f6d;
+      --btn: #2e6cff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: radial-gradient(circle at 20% 0%, #13274d 0%, #081021 55%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(6, 11, 24, 0.86);
+      position: sticky;
+      top: 0;
+    }
+    #logo {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 22px;
+    }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      margin-left: 18px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    nav a:hover { color: #fff; }
+    .wrap {
+      max-width: 1100px;
+      margin: 24px auto;
+      padding: 0 16px 30px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    h1, h2 { margin: 0 0 10px; }
+    h1 { font-size: 28px; grid-column: 1 / -1; }
+    h2 { font-size: 19px; }
+    p { color: var(--muted); margin: 0 0 12px; }
+    .msg { padding: 10px; border-radius: 8px; margin: 0 0 12px; font-size: 14px; }
+    .ok { background: rgba(20,184,102,.18); color: #9af3c6; border: 1px solid rgba(20,184,102,.4); }
+    .err { background: rgba(255,95,109,.14); color: #ff9aa2; border: 1px solid rgba(255,95,109,.35); }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #0c1630;
+      color: #fff;
+      margin-top: 8px;
+    }
+    button {
+      margin-top: 10px;
+      width: 100%;
+      border: 0;
+      border-radius: 8px;
+      padding: 10px;
+      background: var(--btn);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .tickets {
+      grid-column: 1 / -1;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 9px 8px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th { color: var(--muted); font-size: 12px; text-transform: uppercase; }
+    .status {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      font-size: 12px;
+      color: #d8e7ff;
+    }
+    .open-link {
+      color: #9fc2ff;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    @media (max-width: 900px) {
+      .wrap { grid-template-columns: 1fr; }
+      .tickets { grid-column: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/" id="logo">ArBank</a>
+    <nav>
+      <a href="/">Hjem</a>
+      <a href="/konto">Konto</a>
+      <a href="/konto/tjenester">Tjenester</a>
+      <a href="/support">Support</a>
+      <a href="/support/ansatt">Ansatt</a>
+      <a href="/info">Om oss</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <h1>Support</h1>
+
+    <section class="panel">
+      <h2>Send ticket</h2>
+      <p>Beskriv problemet ditt. Du ser svar i ticket-traden under.</p>
+      <% if (ok) { %><div class="msg ok"><%= ok %></div><% } %>
+      <% if (error) { %><div class="msg err"><%= error %></div><% } %>
+      <form action="/support/ticket" method="POST">
+        <input type="text" name="tema" placeholder="Tema" required>
+        <textarea name="melding" rows="4" placeholder="Skriv melding" required></textarea>
+        <button type="submit">Send ticket</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Send feedback</h2>
+      <p>Dette går til ArBank-teamet som intern melding.</p>
+      <form action="/support/mail" method="POST">
+        <input type="text" name="tema" placeholder="Tema" required>
+        <textarea name="melding" rows="4" placeholder="Skriv feedback" required></textarea>
+        <button type="submit">Send feedback</button>
+      </form>
+    </section>
+
+    <section class="panel tickets">
+      <h2>Tickets</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Tema</th>
+            <th>Status</th>
+            <th>Åpne</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (!tickets || tickets.length === 0) { %>
+            <tr><td colspan="4">Ingen tickets enda.</td></tr>
+          <% } %>
+          <% if (tickets && tickets.length > 0) { %>
+            <% tickets.forEach((ticket) => { %>
+              <tr>
+                <td>#<%= ticket.id %></td>
+                <td><%= ticket.tema %></td>
+                <td><span class="status"><%= ticket.status %></span></td>
+                <td><a class="open-link" href="/support/bruker/ticket/<%= ticket.id %>">Åpne</a></td>
+              </tr>
+            <% }) %>
+          <% } %>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
+

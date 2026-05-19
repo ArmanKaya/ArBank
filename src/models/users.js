@@ -55,9 +55,8 @@ async function createUser(username, password) {
 
 async function login(username, password) {
     const user = (await getUserByUsername(username))
-    const balance = await getBalance(user.id);  
-
     if (!user) throw Error("Brukernavn finnes ikke");
+    const balance = await getBalance(user.id);  
     const passwordMatch = await new Promise((resolve, reject) => {
         bcrypt.compare(password, user.password, (err, result) => {
             if (err) reject(err);

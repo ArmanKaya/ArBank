@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="no">
 
 <head>
@@ -302,6 +302,7 @@ footer {
       <a href="/">Hjem</a>
       <a href="/konto">Konto</a>
       <a href="/konto/tjenester">Tjenester</a>
+      <a href="/support">Support</a>
       <a href="/info">Om Oss</a>
     </nav>
   </header>
@@ -315,38 +316,6 @@ footer {
       <a href="/users/login" class="btn">Logg inn</a>
     </div>
 
-    <main class="contact-wrapper">
-  <div class="contact-card">
-    <h2>Kontakt ArBank</h2>
-    <p class="subtext">Velg kategori og skriv meldingen din</p>
-
-    <form action="/send-mail" method="POST" class="contact-form">
-
-      <!-- Category -->
-      <label>Kategori</label>
-      <select name="category" required>
-        <option value="">Velg kategori</option>
-        <option value="help">Hjelp / Support</option>
-        <option value="card">Kort / Konto</option>
-        <option value="bank">Banktjenester</option>
-        <option value="feedback">Tilbakemelding</option>
-        <option value="bug">Feil / Bug</option>
-      </select>
-
-      <!-- Email -->
-      <label>E-post</label>
-      <input type="email" name="email" placeholder="din@mail.com" required>
-
-      <!-- Message -->
-      <label>Melding</label>
-      <textarea name="message" rows="6" placeholder="Skriv meldingen din her..." required></textarea>
-
-      <!-- Button -->
-      <button type="submit">Send melding</button>
-    </form>
-  </div>
-</main>
-
   </main>
 
   <footer>
@@ -355,3 +324,6 @@ footer {
 </body>
 
 </html>
+
+
+
