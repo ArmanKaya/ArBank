@@ -1,5 +1,7 @@
 ﻿const jwt = require("jsonwebtoken")
 const nodemailer = require("nodemailer")
+const fs = require("fs")
+const path = require("path")
 const { db } = require("./users")
 const { getUserByUsername } = require("./users")
 const bcrypt = require("bcrypt")
@@ -17,11 +19,11 @@ async function initSupport() {
                 if (err) return reject(err)
             })
 
-            db.run("CREATE TABLE IF NOT EXISTS support_tickets (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, tema TEXT, melding TEXT, status TEXT DEFAULT 'Ny', svar TEXT DEFAULT '', created_at TEXT, updated_at TEXT)", (err) => {
+            db.run("CREATE TABLE IF NOT EXISTS support_tickets (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, tema TEXT, melding TEXT, status TEXT DEFAULT 'Ny', svar TEXT DEFAULT '')", (err) => {
                 if (err) return reject(err)
             })
 
-            db.run("CREATE TABLE IF NOT EXISTS support_messages (id INTEGER PRIMARY KEY AUTOINCREMENT, ticket_id INTEGER, sender_type TEXT, sender_name TEXT, melding TEXT, created_at TEXT)", (err) => {
+            db.run("CREATE TABLE IF NOT EXISTS support_messages (id INTEGER PRIMARY KEY AUTOINCREMENT, ticket_id INTEGER, sender_type TEXT, sender_name TEXT, melding TEXT)", (err) => {
                 if (err) return reject(err)
             })
 
@@ -144,11 +146,11 @@ async function createTicket(userId, tema, melding) {
     await initSupport()
 
     return new Promise((resolve, reject) => {
-        db.run("INSERT INTO support_tickets (user_id, tema, melding, created_at, updated_at) VALUES (?, ?, ?, datetime('now'), datetime('now'))", [userId, tema, melding], function (err) {
+        db.run("INSERT INTO support_tickets (user_id, tema, melding) VALUES (?, ?, ?)", [userId, tema, melding], function (err) {
             if (err) return reject(err)
 
             const ticketId = this.lastID
-            db.run("INSERT INTO support_messages (ticket_id, sender_type, sender_name, melding, created_at) VALUES (?, 'bruker', ?, ?, datetime('now'))", [ticketId, String(userId), melding], (msgErr) => {
+            db.run("INSERT INTO support_messages (ticket_id, sender_type, sender_name, melding) VALUES (?, 'bruker', ?, ?)", [ticketId, String(userId), melding], (msgErr) => {
                 if (msgErr) reject(msgErr)
                 else resolve(ticketId)
             })
@@ -182,7 +184,7 @@ async function updateTicket(id, status, svar) {
     await initSupport()
 
     return new Promise((resolve, reject) => {
-        db.run("UPDATE support_tickets SET status = ?, svar = ?, updated_at = datetime('now') WHERE id = ?", [status, svar, id], (err) => {
+        db.run("UPDATE support_tickets SET status = ?, svar = ? WHERE id = ?", [status, svar, id], (err) => {
             if (err) reject(err)
             else resolve()
         })
@@ -221,7 +223,7 @@ async function addMessage(ticketId, senderType, senderName, melding) {
     await initSupport()
 
     return new Promise((resolve, reject) => {
-        db.run("INSERT INTO support_messages (ticket_id, sender_type, sender_name, melding, created_at) VALUES (?, ?, ?, ?, datetime('now'))", [ticketId, senderType, senderName, melding], (err) => {
+        db.run("INSERT INTO support_messages (ticket_id, sender_type, sender_name, melding) VALUES (?, ?, ?, ?)", [ticketId, senderType, senderName, melding], (err) => {
             if (err) reject(err)
             else resolve()
         })
@@ -287,3 +289,4 @@ module.exports = {
     addMessage,
     sendSupportMail
 }
+

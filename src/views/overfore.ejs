@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="no">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArBank – Overføring</title>
+  <title>ArBank - Overf&oslash;ring</title>
 
   <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap');
@@ -193,7 +193,7 @@ footer {
         <label for="card">Kortnummer</label>
         <input type="text" id="card" name="selected_reciever" placeholder="1234-5678-9012-3456">
       
-        <label>Velg beløp</label>
+        <label>Velg bel&oslash;p</label>
         <div class="amount-buttons">
           <button type="button" onclick="setAmount(100)">100 kr</button>
           <button type="button" onclick="setAmount(250)">250 kr</button>
@@ -203,18 +203,25 @@ footer {
           <button type="button" onclick="setAmount(5000)">5000 kr</button>
         </div>
       
-        <label for="amount">Eget beløp</label>
-        <input type="number" id="amount" name="amount" placeholder="Skriv inn beløp">
+        <label for="amount">Eget bel&oslash;p</label>
+        <input type="number" id="amount" name="amount" placeholder="Skriv inn bel&oslash;p">
       
-        <button type="submit" class="submit-btn">Utfør overføring</button>
+        <button type="submit" class="submit-btn">Utf&oslash;r overf&oslash;ring</button>
       </form>
       
 </div>      
   </main>
 
   <footer>
-    © 2026 ArBank. Alle rettigheter reservert.
+    &copy; 2026 ArBank. Alle rettigheter reservert.
   </footer>
 
+  <script>
+    function setAmount(amount) {
+      const amountInput = document.getElementById("amount")
+      if (amountInput) amountInput.value = amount
+    }
+  </script>
 </body>
 </html>
+

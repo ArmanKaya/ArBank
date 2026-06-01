@@ -56,6 +56,19 @@
       cursor: pointer;
       font-weight: 700;
     }
+    .meta .home-btn {
+      display: inline-block;
+      border: 0;
+      background: #203666;
+      color: #fff;
+      border-radius: 8px;
+      padding: 8px 10px;
+      cursor: pointer;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 13px;
+      line-height: 1;
+    }
     .wrap {
       max-width: 1200px;
       margin: 20px auto;
@@ -176,6 +189,7 @@
     <a href="/" id="logo">ArBank</a>
     <div class="meta">
       <span>Innlogget: <strong><%= employee.navn %></strong> (<%= employee.stilling %>)</span>
+      <a class="home-btn" href="/">Tilbake til hjem</a>
       <form action="/support/ansatt/logout" method="POST">
         <button type="submit">Logg ut</button>
       </form>
