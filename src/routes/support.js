@@ -30,10 +30,10 @@ function normalizeStatus(status) {
 function sortTicketsByStatus(tickets) {
     const priority = { Ny: 0, "Under behandling": 1, "Løst": 2 }
     return tickets.sort((a, b) => {
-        const aPrio = priority[normalizeStatus(a.status)] ?? 99
+        const aPrio = priority[normalizeStatus(a.status)] ?? 99 // 99 for fallback i tilfelle ukjent status
         const bPrio = priority[normalizeStatus(b.status)] ?? 99
         if (aPrio !== bPrio) return aPrio - bPrio
-        return (b.id || 0) - (a.id || 0)
+        return (b.id || 0) - (a.id || 0) // i tilfelle av samme status, sorter på id
     })
 }
 
@@ -82,7 +82,7 @@ async function renderUserSupport(req, res, ok = null, error = null) {
 
 async function renderEmployeeDashboard(req, res, ok = null, error = null) {
     const tickets = sortTicketsByStatus(await getAllTickets()).map((ticket) => ({
-        ...ticket,
+        ...ticket, // spread operator for å beholde alle originale key value pairs men skriver over status med normalized value
         status: normalizeStatus(ticket.status)
     }))
     const activeTickets = tickets.filter((t) => t.status !== "Løst")

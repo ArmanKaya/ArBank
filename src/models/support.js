@@ -230,7 +230,7 @@ async function addMessage(ticketId, senderType, senderName, melding) {
 
 function readMailConfig() {
     const mailConfigPath = path.join(__dirname, "../../mail.private.json")
-    let user = process.env.MAIL_USER || null
+    let user = process.env.MAIL_USER || null // Backup hvis jeg vil bruke env variabler isteden
     let pass = process.env.MAIL_PASS || null
     let to = process.env.MAIL_TO || null
 
