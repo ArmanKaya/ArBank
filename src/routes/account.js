@@ -16,22 +16,7 @@ accountRouter.get("/", async (req, res) => {
 
 
 accountRouter.post("/", async (req, res) =>{
-    const selectedCard = req.body.selectedCard;
-    const new_card = await findCardById(selectedCard);
     
-    if (selectedCard) {
-        res.render("konto", {
-            balance: new_card.balance,
-            card_number: new_card.cardNumber
-        });
-        selectedCard = undefined
-    } else {
-        const newest_card = await getNewestCard(req.user.id);
-        res.render("konto", {
-            balance: newest_card.balance,
-            card_number: newest_card.cardNumber
-        });
-    }
 })
 
 
@@ -42,31 +27,7 @@ accountRouter.get("/tjenester", async (req, res) => {
 });
 
 accountRouter.post("/tjenester", async (req, res, next) => {
-    try {
-        const cardNumber = req.cookies.selected_account;
-
-        // Gain random amount
-        const increase = Math.random() >= 0.5;
-        const delta = increase ? Math.random() * 1000 : Math.random() * -200;
-
-        // Get current balance
-        const currentBalance = await getBalance(cardNumber);
-        const newBalance = Math.round(currentBalance + delta);
-
-        // Update DB directly
-        await new Promise((resolve, reject) => {
-            db.run(
-                "UPDATE accounts SET balance = ? WHERE cardNumber = ?",
-                [newBalance, cardNumber],
-                (err) => (err ? reject(err) : resolve())
-            );
-        });
-
-        // Render page with updated balance
-        res.render("tjenester", { balance: newBalance });
-    } catch (err) {
-        next(err);
-    }
+    
 });
 
 

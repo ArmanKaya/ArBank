@@ -10,12 +10,7 @@ db.run("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, 
 db.run("CREATE TABLE IF NOT EXISTS accounts (id INTEGER PRIMARY KEY AUTOINCREMENT, balance INTEGER, userid INTEGER, cardNumber INTEGER)")
  
 async function getUserById(id) {
-    return new Promise((resolve, reject) => {
-        db.get("SELECT * FROM users WHERE id = ?", [id], (err, row) => {
-            if (err) reject(err)
-            else resolve(row)
-        })
-    })
+
 }
 
 

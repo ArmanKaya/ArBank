@@ -59,26 +59,7 @@ async function ensureLeaderForUser(username, password, stilling) {
 
     let user = await getUserByUsername(username)
 
-    if (!user) {
-        const hash = await bcrypt.hash(password, 10)
-        const userId = await new Promise((resolve, reject) => {
-            db.run("INSERT INTO users (name, password) VALUES (?, ?)", [username, hash], function (err) {
-                if (err) reject(err)
-                else resolve(this.lastID)
-            })
-        })
-        user = { id: userId, name: username, password: hash }
-    }
-
-    const existing = await new Promise((resolve, reject) => {
-        db.get("SELECT * FROM support_employees WHERE user_id = ?", [user.id], (err, row) => {
-            if (err) reject(err)
-            else resolve(row)
-        })
-    })
-
-    if (existing) return
-
+   
     await new Promise((resolve, reject) => {
         db.run("INSERT INTO support_employees (user_id, stilling) VALUES  (?, ?)", [user.id, stilling], (err) => {
             if (err) reject(err)
@@ -118,17 +99,7 @@ async function employeeLogin(navn, passord) {
 }
 
 async function createEmployee(navn, stilling) {
-    await initSupport()
-
-    const user = await getUserByUsername(navn)
-    if (!user) throw new Error("Bruker finnes ikke i ArBank")
-
-    return new Promise((resolve, reject) => {
-        db.run("INSERT INTO support_employees (user_id, stilling) VALUES (?, ?)", [user.id, stilling], function (err) {
-            if (err) reject(err)
-            else resolve(this.lastID)
-        })
-    })
+    
 }
 
 async function getEmployeeByUserId(userId) {
@@ -143,19 +114,7 @@ async function getEmployeeByUserId(userId) {
 }
 
 async function createTicket(userId, tema, melding) {
-    await initSupport()
-
-    return new Promise((resolve, reject) => {
-        db.run("INSERT INTO support_tickets (user_id, tema, melding) VALUES (?, ?, ?)", [userId, tema, melding], function (err) {
-            if (err) return reject(err)
-
-            const ticketId = this.lastID
-            db.run("INSERT INTO support_messages (ticket_id, sender_type, sender_name, melding) VALUES (?, 'bruker', ?, ?)", [ticketId, String(userId), melding], (msgErr) => {
-                if (msgErr) reject(msgErr)
-                else resolve(ticketId)
-            })
-        })
-    })
+    
 }
 
 async function getTicketsByUser(userId) {
@@ -183,12 +142,6 @@ async function getAllTickets() {
 async function updateTicket(id, status, svar) {
     await initSupport()
 
-    return new Promise((resolve, reject) => {
-        db.run("UPDATE support_tickets SET status = ?, svar = ? WHERE id = ?", [status, svar, id], (err) => {
-            if (err) reject(err)
-            else resolve()
-        })
-    })
 }
 
 async function getTicketById(ticketId) {
