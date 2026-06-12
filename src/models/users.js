@@ -61,7 +61,7 @@ async function createUser(username, password) {
 
 async function login(username, password) {
     const user = (await getUserByUsername(username))
-    if (!user) throw Error("Informasjonen du har skrevet er feil, du har 5 forsøk igjen");
+    if (!user) throw Error("Informasjonen du har skrevet er feil, du har 5 forsøk totalt");
     const balance = await getBalance(user.id);
     const passwordMatch = await new Promise((resolve, reject) => {
         bcrypt.compare(password, user.password, (err, result) => {
@@ -70,7 +70,7 @@ async function login(username, password) {
         });
     });
 
-    if (!passwordMatch) throw new Error("Informasjonen du har skrevet er feil, du har 5 forsøk igjen");
+    if (!passwordMatch) throw new Error("Informasjonen du har skrevet er feil, du har 5 forsøk totalt");
 
     var token = await jwt.sign({id: user.id, nickname: user.name, balance: balance}, 'shhhhh', {expiresIn: "10d"});
     return token
