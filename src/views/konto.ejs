@@ -187,6 +187,189 @@ main {
   transform: translateY(-3px);
 }
 
+.account-content {
+  width: 100%;
+  max-width: 980px;
+  display: grid;
+  grid-template-columns: 480px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.transactions-panel,
+.danger-panel {
+  background: rgba(15, 23, 42, 0.82);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+}
+
+.panel-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.panel-title h2,
+.danger-panel h2 {
+  font-size: 1.25rem;
+  letter-spacing: -0.5px;
+}
+
+.panel-title span {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.transaction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.empty-transactions {
+  color: var(--text-dim);
+  border: 1px dashed var(--glass-border);
+  border-radius: 16px;
+  padding: 18px;
+  line-height: 1.6;
+}
+
+.transaction-item {
+  width: 100%;
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  padding: 14px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 16px;
+  cursor: pointer;
+  text-align: left;
+  transition: 0.25s;
+}
+
+.transaction-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-2px);
+}
+
+.transaction-name {
+  font-weight: 700;
+}
+
+.transaction-date,
+.transaction-category {
+  color: var(--text-dim);
+  font-size: 0.82rem;
+}
+
+.transaction-amount {
+  font-weight: 800;
+  grid-row: span 2;
+  align-self: center;
+}
+
+.transaction-amount.in,
+.modal-amount.in {
+  color: #22c55e;
+}
+
+.transaction-amount.out,
+.modal-amount.out {
+  color: #f87171;
+}
+
+.danger-panel {
+  border-color: rgba(248, 113, 113, 0.35);
+}
+
+.danger-panel p {
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin: 10px 0 16px;
+}
+
+.delete-profile-btn {
+  width: 100%;
+  background: rgba(248, 113, 113, 0.12);
+  color: #fecaca;
+  border: 1px solid rgba(248, 113, 113, 0.5);
+}
+
+.delete-profile-btn:hover {
+  background: rgba(248, 113, 113, 0.22);
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  place-items: center;
+  padding: 20px;
+  background: rgba(2, 6, 23, 0.72);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+}
+
+.modal.open {
+  display: grid;
+}
+
+.modal-box {
+  width: 100%;
+  max-width: 460px;
+  background: #0f172a;
+  border: 1px solid var(--glass-border);
+  border-radius: 22px;
+  padding: 24px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+}
+
+.modal-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.modal-top h3 {
+  font-size: 1.25rem;
+}
+
+.modal-close {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.detail-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  border-top: 1px solid var(--glass-border);
+  padding: 12px 0;
+}
+
+.detail-line span:first-child {
+  color: var(--text-dim);
+}
+
 /* 6. FOOTER */
 footer {
   text-align: center;
@@ -205,10 +388,32 @@ footer {
   .account-card { padding: 30px; }
   div[style*="flex-direction: column"] { width: 100%; }
   div[style*="display: flex; gap: 15px"] { flex-direction: column; width: 100%; padding: 0 20px; }
+  .account-content { grid-template-columns: 1fr; }
+  .transaction-item { grid-template-columns: 1fr; }
+  .transaction-amount { grid-row: auto; }
 }
   </style>
 </head>
 <body>
+  <%
+    function formatTransactionAmount(amount) {
+      if (typeof amount === "string") return amount
+      const sign = amount > 0 ? "+" : "-"
+      return `${sign}${Math.abs(amount).toLocaleString("no-NO")},00 NOK`
+    }
+
+    const transactionList = typeof transactions !== "undefined" ? transactions.map(transaction => ({
+      date: transaction.date,
+      text: transaction.text,
+      category: transaction.category,
+      amount: formatTransactionAmount(transaction.amount),
+      type: transaction.type,
+      from: transaction.sender || transaction.from,
+      to: transaction.receiver || transaction.to,
+      reference: transaction.reference
+    })) : []
+  %>
+
   <header>
     <a href="/" id="logo">ArBank</a>
     <nav>
@@ -221,46 +426,129 @@ footer {
   </header>
 
   <main>
-    <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
-      
-      <div class="account-card">
-        <div class="card-header">
-          <h3>ArBank Debit</h3>
-          <span>Kort</span>
+    <div class="account-content">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+        <div class="account-card">
+          <div class="card-header">
+            <h3>ArBank Debit</h3>
+            <span>Kort</span>
+          </div>
+
+          <div class="card-number">
+            <%= card_number %>
+          </div>
+
+          <div class="card-balance">
+            <%= balance %> NOK
+          </div>
+
+          <a href="/overfore" class="btn">Overfør penger</a>
         </div>
-  
-        <div class="card-number">
-          <%= card_number %>
+
+        <div style="display: flex; gap: 15px;">
+          <form action="/konto/nytt-kort" method="POST">
+            <button type="submit" class="btn create-card">Opprett nytt kort</button>
+          </form>
+
+          <form action="/konto/bytt-kort" method="GET">
+            <button type="submit" class="btn secondary">Bytt kort</button>
+          </form>
         </div>
-  
-        <div class="card-balance">
-          <%= balance %> NOK
-        </div>
-  
-        <a href="/overfore" class="btn">Overfør penger</a>
       </div>
 
-      <div style="display: flex; gap: 15px;">
-        
-        <form action="/konto/nytt-kort" method="POST">
-          <button type="submit" class="btn create-card">Opprett nytt kort</button>
-        </form>
-      
-        <!-- Bytt kort -->
-        <form action="/konto/bytt-kort" method="GET">
-          <button type="submit" class="btn secondary">Bytt kort</button>
-        </form>
-      
+      <div class="right-panel">
+        <section class="transactions-panel">
+          <div class="panel-title">
+            <h2>Transaksjoner</h2>
+            <span>Klikk for detaljer</span>
+          </div>
 
+          <div class="transaction-list">
+            <% if (!transactionList.length) { %>
+              <p class="empty-transactions">Ingen transaksjoner enda. Gå til Tjenester og trykk Handle for å lage en gevinst eller et tap.</p>
+            <% } %>
+
+            <% transactionList.forEach(transaction => { %>
+              <button
+                type="button"
+                class="transaction-item"
+                data-date="<%= transaction.date %>"
+                data-text="<%= transaction.text %>"
+                data-category="<%= transaction.category %>"
+                data-amount="<%= transaction.amount %>"
+                data-type="<%= transaction.type %>"
+                data-from="<%= transaction.from || 'Ikke valgt' %>"
+                data-to="<%= transaction.to || 'Ikke valgt' %>"
+                data-reference="<%= transaction.reference || 'Ingen referanse' %>"
+              >
+                <span class="transaction-name"><%= transaction.text %></span>
+                <span class="transaction-amount <%= transaction.type %>"><%= transaction.amount %></span>
+                <span class="transaction-date"><%= transaction.date %></span>
+                <span class="transaction-category"><%= transaction.category %></span>
+              </button>
+            <% }) %>
+          </div>
+        </section>
+
+        <section class="danger-panel">
+          <h2>Slett profil</h2>
+          <p>Dette er frontend-delen. Når du lager backend kan denne formen kobles til logikken som sletter brukeren.</p>
+          <form action="/users/slett-profil" method="POST">
+            <button type="submit" class="btn delete-profile-btn">Slett profilen min</button>
+          </form>
+        </section>
       </div>
-
-  
     </div>
   </main>
+
+  <div class="modal" id="transactionModal">
+    <div class="modal-box">
+      <div class="modal-top">
+        <h3 id="modalTitle">Transaksjon</h3>
+        <button type="button" class="modal-close" id="closeModal">Lukk</button>
+      </div>
+      <div class="detail-line"><span>Dato</span><strong id="modalDate"></strong></div>
+      <div class="detail-line"><span>Kategori</span><strong id="modalCategory"></strong></div>
+      <div class="detail-line"><span>Belop</span><strong id="modalAmount" class="modal-amount"></strong></div>
+      <div class="detail-line"><span>Fra</span><strong id="modalFrom"></strong></div>
+      <div class="detail-line"><span>Til</span><strong id="modalTo"></strong></div>
+      <div class="detail-line"><span>Referanse</span><strong id="modalReference"></strong></div>
+    </div>
+  </div>
 
   <footer>
     &copy; <%= new Date().getFullYear() %> ArBank. Alle rettigheter reservert.
   </footer>
+
+  <script>
+    const modal = document.getElementById("transactionModal")
+    const closeModal = document.getElementById("closeModal")
+
+    document.addEventListener("click", (event) => {
+      const transactionElement = event.target.closest(".transaction-item")
+      if (!transactionElement) return
+
+      document.getElementById("modalTitle").textContent = transactionElement.dataset.text
+      document.getElementById("modalDate").textContent = transactionElement.dataset.date
+      document.getElementById("modalCategory").textContent = transactionElement.dataset.category
+      document.getElementById("modalAmount").textContent = transactionElement.dataset.amount
+      document.getElementById("modalAmount").className = `modal-amount ${transactionElement.dataset.type}`
+      document.getElementById("modalFrom").textContent = transactionElement.dataset.from
+      document.getElementById("modalTo").textContent = transactionElement.dataset.to
+      document.getElementById("modalReference").textContent = transactionElement.dataset.reference
+      modal.classList.add("open")
+    })
+
+    closeModal.addEventListener("click", () => {
+      modal.classList.remove("open")
+    })
+
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        modal.classList.remove("open")
+      }
+    })
+  </script>
 </body>
 </html>
 

@@ -1,6 +1,8 @@
 const sqlite = require("sqlite3");
 const db = new sqlite.Database("database.db");
 
+db.run("CREATE TABLE IF NOT EXISTS transactions (id INTEGER PRIMARY KEY AUTOINCREMENT, cardNumber TEXT, date TEXT, text TEXT, category TEXT, amount INTEGER, type TEXT, sender TEXT, receiver TEXT, reference TEXT)");
+
 // Create a new account for a user
 async function createAccount(userId) {
     let cardnumber = [];
@@ -60,6 +62,42 @@ async function updateBalance(cardNumber, newBalance) {
     });
 }
 
+async function createTransaction(cardNumber, transaction) {
+    return new Promise((resolve, reject) => {
+        db.run(
+            "INSERT INTO transactions (cardNumber, date, text, category, amount, type, sender, receiver, reference) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [
+                cardNumber,
+                transaction.date,
+                transaction.text,
+                transaction.category,
+                transaction.amount,
+                transaction.type,
+                transaction.sender,
+                transaction.receiver,
+                transaction.reference,
+            ],
+            function (err) {
+                if (err) return reject(err);
+                resolve(this.lastID);
+            }
+        );
+    });
+}
+
+async function getTransactions(cardNumber) {
+    return new Promise((resolve, reject) => {
+        db.all(
+            "SELECT * FROM transactions WHERE cardNumber = ? ORDER BY id DESC",
+            [cardNumber],
+            (err, rows) => {
+                if (err) return reject(err);
+                resolve(rows);
+            }
+        );
+    });
+}
+
 
 async function findCards(userId) {
     return new Promise((resolve, reject) => {
@@ -93,6 +131,8 @@ module.exports = {
     getBalance,
     findCardById,
     updateBalance,
+    createTransaction,
+    getTransactions,
     findCards,
     getNewestCard,
     db,
