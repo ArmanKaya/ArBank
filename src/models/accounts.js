@@ -3,7 +3,6 @@ const db = new sqlite.Database("database.db");
 
 db.run("CREATE TABLE IF NOT EXISTS transactions (id INTEGER PRIMARY KEY AUTOINCREMENT, cardNumber TEXT, date TEXT, text TEXT, category TEXT, amount INTEGER, type TEXT, sender TEXT, receiver TEXT, reference TEXT)");
 
-// Create a new account for a user
 async function createAccount(userId) {
     let cardnumber = [];
     for (let part = 0; part < 4; part++) {
@@ -23,7 +22,15 @@ async function createAccount(userId) {
     });
 }
 
-// Get balance by cardNumber
+async function deleteAccount(id) {
+    return new Promise((resolve, reject) => {
+        db.run("DELETE FROM accounts WHERE userid = ?", [id], (err) => {
+            if (err) reject(err)
+            else resolve()
+        })
+    })
+}
+
 async function getBalance(cardNumber) {
     return new Promise((resolve, reject) => {
         db.get(
@@ -37,7 +44,6 @@ async function getBalance(cardNumber) {
     });
 }
 
-// Get full account by cardNumber
 async function findCardById(id) {
     return new Promise((resolve, reject) => {
         db.get(
@@ -50,7 +56,6 @@ async function findCardById(id) {
         );
     });
 }
-
 
 async function updateBalance(cardNumber, newBalance) {
     return new Promise((resolve, reject) => {
@@ -98,7 +103,6 @@ async function getTransactions(cardNumber) {
     });
 }
 
-
 async function findCards(userId) {
     return new Promise((resolve, reject) => {
         db.all(
@@ -112,7 +116,6 @@ async function findCards(userId) {
     });
 }
 
-// Get newest card for a user
 async function getNewestCard(userId) {
     return new Promise((resolve, reject) => {
         db.get(
@@ -135,5 +138,6 @@ module.exports = {
     getTransactions,
     findCards,
     getNewestCard,
-    db,
+    deleteAccount,
+    db
 };

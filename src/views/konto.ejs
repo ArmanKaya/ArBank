@@ -426,6 +426,23 @@ footer {
   </header>
 
   <main>
+
+  <% if (typeof errorDeletion !== "undefined" && errorDeletion) { %>
+  <div style="
+    background: rgba(248, 113, 113, 0.12);
+    border: 1px solid rgba(248, 113, 113, 0.5);
+    color: #fecaca;
+    padding: 14px 16px;
+    border-radius: 12px;
+    margin: 20px auto;
+    max-width: 600px;
+    text-align: center;
+    font-weight: 600;
+  ">
+    <%= errorDeletion %>
+  </div>
+<% } %>
+
     <div class="account-content">
       <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
         <div class="account-card">
@@ -433,10 +450,10 @@ footer {
             <h3>ArBank Debit</h3>
             <span>Kort</span>
           </div>
-
-          <div class="card-number">
-            <%= card_number %>
-          </div>
+          
+            <div class="card-number">
+                <%= card_number %>
+            </div>
 
           <div class="card-balance">
             <%= balance %> NOK

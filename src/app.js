@@ -13,6 +13,7 @@ const { inforoute } = require("./routes/omoss")
 const { transferRouter } = require("./routes/overfore")
 const { findCardById } = require("./models/accounts");
 const { supportRouter } = require("./routes/support")
+require("dotenv").config()
 
 
 

@@ -4,11 +4,10 @@ const bcrypt = require("bcrypt")
 var jwt = require('jsonwebtoken');
 const { getBalance} = require("../models/accounts")
 
-
 db.run("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, password TEXT)")
 
-db.run("CREATE TABLE IF NOT EXISTS accounts (id INTEGER PRIMARY KEY AUTOINCREMENT, balance INTEGER, userid INTEGER, cardNumber INTEGER)")
- 
+db.run("CREATE TABLE IF NOT EXISTS accounts (id INTEGER PRIMARY KEY AUTOINCREMENT, balance INTEGER, userid INTEGER, cardNumber TEXT)")
+
 async function getUserById(id) {
     return new Promise((resolve, reject) => {
         db.get("SELECT * FROM users WHERE id = ?", [id], (err, row) => {
@@ -18,16 +17,14 @@ async function getUserById(id) {
     }
 )}
 
-async function deleteUser(id){
+async function deleteUser(id) {
     return new Promise((resolve, reject) => {
-        db.run("DELETE * FROM users where id = ?", [id], (err, row) => {
+        db.run("DELETE FROM users WHERE id = ?", [id], (err) => {
             if (err) reject(err)
-            else resolve(row)
+            else resolve()
         })
     })
 }
-    
-
 
 async function getUserByUsername(username) {
     return new Promise((resolve, reject) => {
@@ -47,7 +44,6 @@ async function userExists(username) {
     })
 }
 
-
 async function createUser(username, password) {
     return new Promise(
         (resolve, reject) => {
@@ -66,7 +62,7 @@ async function createUser(username, password) {
 async function login(username, password) {
     const user = (await getUserByUsername(username))
     if (!user) throw Error("Brukernavn finnes ikke");
-    const balance = await getBalance(user.id);  
+    const balance = await getBalance(user.id);
     const passwordMatch = await new Promise((resolve, reject) => {
         bcrypt.compare(password, user.password, (err, result) => {
             if (err) reject(err);
@@ -80,5 +76,4 @@ async function login(username, password) {
     return token
 }
 
-
-module.exports = {createUser, userExists, getUserById, getUserByUsername, login, deleteUser}
+module.exports = {createUser, userExists, getUserById, getUserByUsername, login, deleteUser, db}

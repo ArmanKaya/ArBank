@@ -9,7 +9,25 @@ const bcrypt = require("bcrypt")
 
 
 async function ensureLeaderForUser(username, password, stilling) {
+   if (!user) {
+        const hash = await bcrypt.hash(password, 10)
+        const userId = await new Promise((resolve, reject) => {
+            db.run("INSERT INTO users (name, password) VALUES (?, ?)", [username, hash], function (err) {
+                if (err) reject(err)
+                else resolve(this.lastID)
+            })
+        })
+        user = { id: userId, name: username, password: hash }
+    }
 
+    const existing = await new Promise((resolve, reject) => {
+        db.get("SELECT * FROM support_employees WHERE user_id = ?", [user.id], (err, row) => {
+            if (err) reject(err)
+            else resolve(row)
+        })
+    })
+
+    if (existing) return
 
     let user = await getUserByUsername(username)
 
@@ -53,7 +71,16 @@ async function employeeLogin(navn, passord) {
 }
 
 async function createEmployee(navn, stilling) {
-    
+
+    const user = await getUserByUsername(navn)
+    if (!user) throw new Error("Bruker finnes ikke i ArBank")
+
+    return new Promise((resolve, reject) => {
+        db.run("INSERT INTO support_employees (user_id, stilling) VALUES (?, ?)", [user.id, stilling], function (err) {
+            if (err) reject(err)
+            else resolve(this.lastID)
+        })
+    })
 }
 
 async function getEmployeeByUserId(userId) {
@@ -68,8 +95,6 @@ async function getEmployeeByUserId(userId) {
 }
 
 async function createTicket(userId, tema, melding) {
-
-
     return new Promise((resolve, reject) => {
         db.run("INSERT INTO support_tickets (user_id, tema, melding) VALUES (?, ?, ?)", [userId, tema, melding], function (err) {
             if (err) return reject(err)
@@ -80,7 +105,7 @@ async function createTicket(userId, tema, melding) {
                 else resolve(ticketId)
             })
         })
-    }) 
+    })
 }
 
 async function getTicketsByUser(userId) {
@@ -105,8 +130,12 @@ async function getAllTickets() {
 }
 
 async function updateTicket(id, status, svar) {
-
-
+    return new Promise((resolve, reject) => {
+        db.run("UPDATE support_tickets SET status = ?, svar = ? WHERE id = ?", [status, svar, id], (err) => {
+            if (err) reject(err)
+            else resolve()
+        })
+    })
 }
 
 async function getTicketById(ticketId) {
@@ -149,9 +178,9 @@ async function addMessage(ticketId, senderType, senderName, melding) {
 
 function readMailConfig() {
     const mailConfigPath = path.join(__dirname, "../../mail.private.json")
-    let user = process.env.MAIL_USER || null // Backup hvis jeg vil bruke env variabler isteden
-    let pass = process.env.MAIL_PASS || null
-    let to = process.env.MAIL_TO || null
+        let user = process.env.SUPPORT_MAIL || null 
+        let pass = process.env.SUPPORT_MAIL_PASSWORD || null
+        let to = process.env.SUPPORT_RECEIVER || null
 
     if ((!user || !pass) && fs.existsSync(mailConfigPath)) {
         try {
@@ -204,6 +233,7 @@ module.exports = {
     getTicketById,
     getMessagesByTicket,
     addMessage,
-    sendSupportMail
+    sendSupportMail,
+    db
 }
 
