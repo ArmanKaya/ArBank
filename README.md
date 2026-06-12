@@ -32,8 +32,15 @@ Steg 6: skriv i terminalen «npm run dev», Dermed skal nettsiden kjøre!
 (om du sliter med å finne den i browser er det bare å skrive 127.0.0.1:3001 i address baren)
 
 VIKTIG INFOMRASJON:
+
 dersom det står at mail oppsett mangler dette fordi den er i en privat .env siden den inneholder privat informasjon,
-dersom du vill legge til eget opprett en .env fil og skriv inni den som følger:
+dersom du vill legge til eget opprett en mail.private.json og .env (backup) fil og skriv inni den som følger:
+
+mail.private.json fil:
+  "user": "mailen du ønsker å sende fra",
+  "pass": "google app passkeyen til denne brukeren",
+  "to": "mailen som skal mota mailene"
+
 SUPPORT_MAIL="mailen du ønsker å sende fra"
 SUPPORT_MAIL_PASSWORD="google app passkeyen til denne brukeren"
 SUPPORT_RECEIVER="mailen som skal mota mailene"
