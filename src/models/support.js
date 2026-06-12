@@ -6,56 +6,10 @@ const { db } = require("./users")
 const { getUserByUsername } = require("./users")
 const bcrypt = require("bcrypt")
 
-let supportInitDone = false
-let supportInitPromise = null
 
-async function initSupport() {
-    if (supportInitDone) return
-    if (supportInitPromise) return supportInitPromise
-
-    supportInitPromise = new Promise((resolve, reject) => {
-        db.serialize(() => {
-            db.run("CREATE TABLE IF NOT EXISTS support_employees (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER UNIQUE, stilling TEXT)", (err) => {
-                if (err) return reject(err)
-            })
-
-            db.run("CREATE TABLE IF NOT EXISTS support_tickets (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, tema TEXT, melding TEXT, status TEXT DEFAULT 'Ny', svar TEXT DEFAULT '')", (err) => {
-                if (err) return reject(err)
-            })
-
-            db.run("CREATE TABLE IF NOT EXISTS support_messages (id INTEGER PRIMARY KEY AUTOINCREMENT, ticket_id INTEGER, sender_type TEXT, sender_name TEXT, melding TEXT)", (err) => {
-                if (err) return reject(err)
-            })
-
-            db.all("PRAGMA table_info(support_employees)", [], (err, rows) => {
-                if (err) return reject(err)
-
-                const hasUserId = rows.some((col) => col.name === "user_id")
-                const hasStilling = rows.some((col) => col.name === "stilling")
-
-                if (!hasUserId) {
-                    db.run("ALTER TABLE support_employees ADD COLUMN user_id INTEGER", (alterErr) => {
-                        if (alterErr) return reject(alterErr)
-                    })
-                }
-
-                if (!hasStilling) {
-                    db.run("ALTER TABLE support_employees ADD COLUMN stilling TEXT DEFAULT 'ansatt'", (alterErr) => {
-                        if (alterErr) return reject(alterErr)
-                    })
-                }
-
-                supportInitDone = true
-                resolve()
-            })
-        })
-    })
-
-    return supportInitPromise
-}
 
 async function ensureLeaderForUser(username, password, stilling) {
-    await initSupport()
+
 
     let user = await getUserByUsername(username)
 
@@ -74,7 +28,7 @@ async function ensureLeader() {
 }
 
 async function employeeLogin(navn, passord) {
-    await initSupport()
+
 
     const user = await getUserByUsername(navn)
     if (!user) throw new Error("Bruker finnes ikke")
@@ -103,7 +57,7 @@ async function createEmployee(navn, stilling) {
 }
 
 async function getEmployeeByUserId(userId) {
-    await initSupport()
+
 
     return new Promise((resolve, reject) => {
         db.get("SELECT support_employees.*, users.name AS navn FROM support_employees LEFT JOIN users ON users.id = support_employees.user_id WHERE support_employees.user_id = ?", [userId], (err, row) => {
@@ -114,11 +68,22 @@ async function getEmployeeByUserId(userId) {
 }
 
 async function createTicket(userId, tema, melding) {
-    
+
+
+    return new Promise((resolve, reject) => {
+        db.run("INSERT INTO support_tickets (user_id, tema, melding) VALUES (?, ?, ?)", [userId, tema, melding], function (err) {
+            if (err) return reject(err)
+
+            const ticketId = this.lastID
+            db.run("INSERT INTO support_messages (ticket_id, sender_type, sender_name, melding) VALUES (?, 'bruker', ?, ?)", [ticketId, String(userId), melding], (msgErr) => {
+                if (msgErr) reject(msgErr)
+                else resolve(ticketId)
+            })
+        })
+    }) 
 }
 
 async function getTicketsByUser(userId) {
-    await initSupport()
 
     return new Promise((resolve, reject) => {
         db.all("SELECT * FROM support_tickets WHERE user_id = ? ORDER BY id DESC", [userId], (err, rows) => {
@@ -129,7 +94,7 @@ async function getTicketsByUser(userId) {
 }
 
 async function getAllTickets() {
-    await initSupport()
+
 
     return new Promise((resolve, reject) => {
         db.all("SELECT support_tickets.*, users.name AS user_name FROM support_tickets LEFT JOIN users ON users.id = support_tickets.user_id ORDER BY support_tickets.id DESC", [], (err, rows) => {
@@ -140,12 +105,11 @@ async function getAllTickets() {
 }
 
 async function updateTicket(id, status, svar) {
-    await initSupport()
+
 
 }
 
 async function getTicketById(ticketId) {
-    await initSupport()
 
     return new Promise((resolve, reject) => {
         db.get("SELECT * FROM support_tickets WHERE id = ?", [ticketId], (err, ticket) => {
@@ -162,7 +126,7 @@ async function getTicketById(ticketId) {
 }
 
 async function getMessagesByTicket(ticketId) {
-    await initSupport()
+
 
     return new Promise((resolve, reject) => {
         db.all("SELECT * FROM support_messages WHERE ticket_id = ? ORDER BY id ASC", [ticketId], (err, rows) => {
@@ -173,7 +137,7 @@ async function getMessagesByTicket(ticketId) {
 }
 
 async function addMessage(ticketId, senderType, senderName, melding) {
-    await initSupport()
+
 
     return new Promise((resolve, reject) => {
         db.run("INSERT INTO support_messages (ticket_id, sender_type, sender_name, melding) VALUES (?, ?, ?, ?)", [ticketId, senderType, senderName, melding], (err) => {

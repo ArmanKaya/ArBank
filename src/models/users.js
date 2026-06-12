@@ -10,8 +10,23 @@ db.run("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, 
 db.run("CREATE TABLE IF NOT EXISTS accounts (id INTEGER PRIMARY KEY AUTOINCREMENT, balance INTEGER, userid INTEGER, cardNumber INTEGER)")
  
 async function getUserById(id) {
+    return new Promise((resolve, reject) => {
+        db.get("SELECT * FROM users WHERE id = ?", [id], (err, row) => {
+            if (err) reject(err)
+            else resolve(row)
+        })
+    }
+)}
 
+async function deleteUser(id){
+    return new Promise((resolve, reject) => {
+        db.run("DELETE * FROM users where id = ?", [id], (err, row) => {
+            if (err) reject(err)
+            else resolve(row)
+        })
+    })
 }
+    
 
 
 async function getUserByUsername(username) {
@@ -66,4 +81,4 @@ async function login(username, password) {
 }
 
 
-module.exports = {createUser, userExists, getUserById, getUserByUsername, login, db }
+module.exports = {createUser, userExists, getUserById, getUserByUsername, login, deleteUser}
