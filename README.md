@@ -40,4 +40,5 @@ jeg valgte å slette brukere fra databasen, med en seperat for konto(accounts) o
 
 jeg brukte SQLite fordi det kjører raskere enn andre database engines for nettsider som min som ikke har mange klienter.
 
-
+jeg valgte å bruke express rate limiter, for å unngå brute forcing, jeg gjorde det på den måten fordi det er viktig å sjekke hvilken ip som gjetter, ikke bare hvilken bruker de gjetter, da kunne andre med villje sperret venner eller folk sine kontoer, 
+men med IP, sperrer vi den som faktisk skriver in feil passord ovenfor brukeren som det blir skrevet feil på, i tillegg unngår dette at de prøver 5 ganger på alle brukere med en bot.
