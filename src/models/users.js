@@ -20,7 +20,7 @@ async function getUserById(id) {
 async function deleteUser(id) {
     return new Promise((resolve, reject) => {
         db.run("DELETE FROM users WHERE id = ?", [id], (err) => {
-            if (err) reject(err)
+            if (err) reject(new Error("Brukeren ble ikke funnet"))
             else resolve()
         })
     })
